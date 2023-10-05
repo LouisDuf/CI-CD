@@ -68,3 +68,42 @@ steps:
       - /entrypoint.sh --type swagger --loc /drone/src/swagger.json
     depends_on:
       - generate-swagger
+
+  - name: hadolint
+    image: ghcr.io/hadolint/hadolint:latest-alpine
+    commands:
+      - hadolint Dockerfile
+
+  # docker image build:
+  - name: docker-build-and-push
+    image: plugins/docker
+    settings:
+      dockerfile: Sources/Dockerfile
+      context: Sources/
+      registry: hub.codefirst.iut.uca.fr
+      repo: hub.codefirst.iut.uca.fr/my.login/myRepository
+      username:
+        from_secret: SECRET_REGISTRY_USERNAME_CODEFIRST
+      password:
+        from_secret: SECRET_REGISTRY_PASSWORD_CODEFIRST
+
+
+  # database container deployment
+  - name: deploy-container-mysql
+    image: hub.codefirst.iut.uca.fr/thomas.bellembois/codefirst-dockerproxy-clientdrone:latest
+    environment:
+      IMAGENAME: mariadb:10
+      CONTAINERNAME: louisdufour-mysql
+      COMMAND: create
+      # OVERWRITE: false
+      PRIVATE: true
+      CODEFIRST_CLIENTDRONE_ENV_MARIADB_ROOT_PASSWORD:
+        from_secret: db_root_password
+      CODEFIRST_CLIENTDRONE_ENV_MARIADB_DATABASE:
+        from_secret: db_database
+      CODEFIRST_CLIENTDRONE_ENV_MARIADB_USER:
+        from_secret: db_user
+      CODEFIRST_CLIENTDRONE_ENV_MARIADB_PASSWORD:
+        from_secret: db_password      
+
+        
