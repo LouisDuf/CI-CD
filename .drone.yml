@@ -123,3 +123,8 @@ steps:
         from_secret: db_password
       CODEFIRST_CLIENTDRONE_ENV_DB_DATABASE:
         from_secret: db_database
+      CODEFIRST_CLIENTDRONE_ENV_OPEN_LIBRARY:
+        Bdd
+    depends_on: [deploy-mariadb, create-image-docker]
+
+
