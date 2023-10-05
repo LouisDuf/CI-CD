@@ -72,6 +72,7 @@ steps:
   - name: hadolint
     image: ghcr.io/hadolint/hadolint:latest-alpine
     commands:
+      - cd Sources/
       - hadolint Dockerfile
 
   # docker image build:
@@ -89,7 +90,7 @@ steps:
 
 
   # database container deployment
-  - name: deploy-container-mysql
+  - name: deploy-container-mariadb
     image: hub.codefirst.iut.uca.fr/thomas.bellembois/codefirst-dockerproxy-clientdrone:latest
     environment:
       IMAGENAME: mariadb:10
