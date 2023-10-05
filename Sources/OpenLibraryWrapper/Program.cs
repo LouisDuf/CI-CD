@@ -17,7 +17,7 @@ var dbDataBase = Environment.GetEnvironmentVariable("MARIADB_DATABASE");
 var dbUser = Environment.GetEnvironmentVariable("MARIADB_USER");
 var dbPassword = Environment.GetEnvironmentVariable("MARIADB_PASSWORD");
 var dbServer = Environment.GetEnvironmentVariable("MARIADB_SERVER");
-var dbConnection = $"server={dbServer};port=3306;user={dbUser};password={dbPassword};database={dbDatabase}";
+var dbConnection = $"server={dbServer};port=3306;user={dbUser};password={dbPassword};database={dbDataBase}";
 
 switch (dtoManager)
 {
