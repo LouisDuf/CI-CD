@@ -10,9 +10,13 @@ WORKDIR /src
 COPY ["OpenLibraryWrapper/OpenLibraryWrapper.csproj", "OpenLibraryWrapper/"]
 COPY ["LibraryDTO/LibraryDTO.csproj", "LibraryDTO/"]
 COPY ["StubbedDTO/StubbedDTO.csproj", "StubbedDTO/"]
-COPY ["DtoAbstractLayer/DtoAbstractLayer.csproj", "DtoAbstractLayer/"]
 COPY ["JsonReader/JsonReader.csproj", "JsonReader/"]
+COPY ["DtoAbstractLayer/DtoAbstractLayer.csproj", "DtoAbstractLayer/"]
 COPY ["OpenLibraryClient/OpenLibraryClient.csproj", "OpenLibraryClient/"]
+COPY ["MyLibraryManager/MyLibraryManager.csproj", "MyLibraryManager/"]
+COPY ["MyLibraryDB/MyLibraryDB.csproj", "MyLibraryDB/"]
+COPY ["MyLibraryEntities/MyLibraryEntities.csproj", "MyLibraryEntities/"]
+COPY ["StubbedDB/StubbedDB.csproj", "StubbedDB/"]
 RUN dotnet restore "OpenLibraryWrapper/OpenLibraryWrapper.csproj"
 COPY . .
 WORKDIR "/src/OpenLibraryWrapper"
