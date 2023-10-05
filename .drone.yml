@@ -76,7 +76,7 @@ steps:
       - hadolint Dockerfile
 
   # docker image build:
-  - name: docker-build-and-push
+  - name: create-image-docker
     image: plugins/docker
     settings:
       dockerfile: Sources/Dockerfile
@@ -90,7 +90,7 @@ steps:
 
 
   # database container deployment
-  - name: deploy-container-mariadb
+  - name: deploy-mariadb
     image: hub.codefirst.iut.uca.fr/thomas.bellembois/codefirst-dockerproxy-clientdrone:latest
     environment:
       IMAGENAME: mariadb:10
@@ -107,4 +107,11 @@ steps:
       CODEFIRST_CLIENTDRONE_ENV_MARIADB_PASSWORD:
         from_secret: db_password      
 
-        
+  # container deployment
+  - name: deploy-API
+    image: hub.codefirst.iut.uca.fr/thomas.bellembois/codefirst-dockerproxy-clientdrone:latest
+    environment:
+      IMAGENAME: hub.codefirst.iut.uca.fr/louis.dufour/openlibraryws_wrapper:latest
+      CONTAINERNAME: ApiOpenLibrary
+      COMMAND: create
+      OVERWRITE: true
