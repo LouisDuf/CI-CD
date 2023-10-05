@@ -94,7 +94,7 @@ steps:
     image: hub.codefirst.iut.uca.fr/thomas.bellembois/codefirst-dockerproxy-clientdrone:latest
     environment:
       IMAGENAME: mariadb:10
-      CONTAINERNAME: louisdufour-mysql
+      CONTAINERNAME: mariadb-server
       COMMAND: create
       # OVERWRITE: false
       PRIVATE: true
@@ -115,6 +115,8 @@ steps:
       CONTAINERNAME: ApiOpenLibrary
       COMMAND: create
       OVERWRITE: true
+      CODEFIRST_CLIENTDRONE_ENV_OPEN_LIBRARY: Bdd
+      CODEFIRST_CLIENTDRONE_ENV_MARIADB_SERVER: louisdufour-mariadb-server
       CODEFIRST_CLIENTDRONE_ENV_DB_SERVER:
         from_secret: db_server
       CODEFIRST_CLIENTDRONE_ENV_DB_USER:
@@ -123,8 +125,6 @@ steps:
         from_secret: db_password
       CODEFIRST_CLIENTDRONE_ENV_DB_DATABASE:
         from_secret: db_database
-      CODEFIRST_CLIENTDRONE_ENV_OPEN_LIBRARY:
-        Bdd
     depends_on: [deploy-mariadb, create-image-docker]
 
 
