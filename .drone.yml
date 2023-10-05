@@ -1,0 +1,70 @@
+kind: pipeline
+type: docker
+name: projectMarc
+
+trigger:
+  event:
+    - push
+
+steps:
+  - name: build
+    image: mcr.microsoft.com/dotnet/sdk:7.0
+    commands:
+      - cd Sources/
+      - dotnet restore OpenLibraryWS_Wrapper.sln
+      - dotnet build OpenLibraryWS_Wrapper.sln -c Release --no-restore
+      - dotnet publish OpenLibraryWrapper/OpenLibraryWrapper.csproj -c Release --no-restore -o $CI_PROJECT_DIR/build/release
+
+  - name: test
+    image: mcr.microsoft.com/dotnet/sdk:7.0
+    commands:
+      - cd Sources/
+      - dotnet restore OpenLibraryWS_Wrapper.sln
+      - dotnet test OpenLibraryWS_Wrapper.sln --no-restore 
+    depends_on: [build]
+
+  - name: analyse
+    image: hub.codefirst.iut.uca.fr/marc.chevaldonne/codefirst-dronesonarplugin-dotnet7
+    secrets: [ SECRET_SONAR_LOGIN ]
+    environment:
+      sonar_host: https://codefirst.iut.uca.fr/sonar/
+      sonar_token:
+        from_secret: SECRET_SONAR_LOGIN
+      project_key: OpenLibraryWS_Wrapper_Louis
+      coverage_exclusions: "Tests/**"
+    commands:
+      - cd Sources/
+      - dotnet restore OpenLibraryWS_Wrapper.sln
+      - dotnet sonarscanner begin /k:$${project_key} /d:sonar.host.url=$${sonar_host} /d:sonar.coverageReportPaths="coveragereport/SonarQube.xml" /d:sonar.coverage.exclusions=$${coverage_exclusions} /d:sonar.login=$${sonar_token} 
+      - dotnet build OpenLibraryWS_Wrapper.sln -c Release --no-restore
+      - dotnet test OpenLibraryWS_Wrapper.sln --logger trx --no-restore /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura --collect "XPlat Code Coverage"
+      - reportgenerator -reports:"**/coverage.cobertura.xml" -reporttypes:SonarQube -targetdir:"coveragereport"
+      - dotnet publish OpenLibraryWrapper/OpenLibraryWrapper.csproj -c Release --no-restore -o $CI_PROJECT_DIR/build/release 
+      - dotnet sonarscanner end /d:sonar.login=$${sonar_token}
+    depends_on: [test]
+
+
+  - name: Docs
+    image: hub.codefirst.iut.uca.fr/thomas.bellembois/codefirst-docdeployer
+    #failure: ignore
+    volumes:
+      - name: docs
+        path: /docs
+    commands:
+      - /entrypoint.sh
+
+  - name: generate-swagger
+    image: mcr.microsoft.com/dotnet/sdk:7.0
+    commands:
+      - cd Sources/OpenLibraryWrapper
+      - dotnet tool install --version 6.5.0 Swashbuckle.AspNetCore.Cli --tool-path /bin
+      - /bin/swagger tofile --output /drone/src/swagger.json bin/Release/net7.0/OpenLibraryWrapper.dll v1
+    depends_on:
+      - build
+
+  - name: deploy-swagger
+    image: hub.codefirst.iut.uca.fr/maxime.batista/codefirst-docdeployer
+    commands:
+      - /entrypoint.sh --type swagger --loc /drone/src/swagger.json
+    depends_on:
+      - generate-swagger
