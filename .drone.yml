@@ -93,7 +93,7 @@ steps:
   - name: deploy-mariadb
     image: hub.codefirst.iut.uca.fr/thomas.bellembois/codefirst-dockerproxy-clientdrone:latest
     environment:
-      IMAGENAME: mariadb:10
+      IMAGENAME: mariadb:11
       CONTAINERNAME: mariadb-server
       COMMAND: create
       # OVERWRITE: false
