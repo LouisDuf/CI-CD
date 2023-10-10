@@ -96,7 +96,7 @@ steps:
       IMAGENAME: mariadb:11
       CONTAINERNAME: mariadb-server
       COMMAND: create
-      OVERWRITE: true
+      OVERWRITE: false
       # Proxy de merde
       PRIVATE: false
       CODEFIRST_CLIENTDRONE_ENV_MARIADB_ROOT_PASSWORD:

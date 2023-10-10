@@ -19,8 +19,6 @@ var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD");
 var dbServer = Environment.GetEnvironmentVariable("DB_SERVER");
 var dbConnection = $"server={dbServer};port=3306;user={dbUser};password={dbPassword};database={dbDataBase}";
 
-Console.WriteLine($"JJJJJJJJJJJJAJAJAJAJAJAJAJAJAJAJAJAAAAAAAAAAAAAALBLBHQHUDS{dbConnection}");
-
 switch (dtoManager)
 {
     case "Stub":
