@@ -11,7 +11,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 7.0
+        dotnet-version: 7.0.100
     
     - name: Restore dependencies
       run: dotnet restore Sources/OpenLibraryWS_Wrapper.sln
@@ -30,7 +30,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 7.0
+        dotnet-version: 7.0.100
     
     - name: Test
       run: dotnet test Sources/OpenLibraryWS_Wrapper.sln --no-restore 
