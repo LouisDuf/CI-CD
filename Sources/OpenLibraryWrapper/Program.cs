@@ -13,10 +13,10 @@ builder.Services.AddSingleton<IDtoManager,OpenLibClientAPI>();
 builder.Services.AddControllers();
 
 var dtoManager = Environment.GetEnvironmentVariable("OPEN_LIBRARY");
-var dbDataBase = Environment.GetEnvironmentVariable("MARIADB_DATABASE");
-var dbUser = Environment.GetEnvironmentVariable("MARIADB_USER");
-var dbPassword = Environment.GetEnvironmentVariable("MARIADB_PASSWORD");
-var dbServer = Environment.GetEnvironmentVariable("MARIADB_SERVER");
+var dbDataBase = Environment.GetEnvironmentVariable("DB_DATABASE");
+var dbUser = Environment.GetEnvironmentVariable("DB_USER");
+var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD");
+var dbServer = Environment.GetEnvironmentVariable("DB_SERVER");
 var dbConnection = $"server={dbServer};port=3306;user={dbUser};password={dbPassword};database={dbDataBase}";
 
 Console.WriteLine($"JJJJJJJJJJJJAJAJAJAJAJAJAJAJAJAJAJAAAAAAAAAAAAAALBLBHQHUDS{dbConnection}");
