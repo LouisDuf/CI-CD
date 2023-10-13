@@ -72,7 +72,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
         shell: powershell
         run: |
+          cd Sources/
+          dotnet restore OpenLibraryWS_Wrapper.sln
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"OpenLibraryWS_Wrapper_GitHub" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}"
           dotnet build
+          dotnet build OpenLibraryWS_Wrapper.sln -c Release --no-restore
+          dotnet test OpenLibraryWS_Wrapper.sln --logger trx --no-restore /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura --collect "XPlat Code Coverage"
+          reportgenerator -reports:"**/coverage.cobertura.xml" -reporttypes:SonarQube -targetdir:"coveragereport"
+          dotnet publish OpenLibraryWrapper/OpenLibraryWrapper.csproj -c Release --no-restore -o $CI_PROJECT_DIR/build/release
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
 
