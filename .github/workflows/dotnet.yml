@@ -64,3 +64,5 @@ jobs:
         dotnet test OpenLibraryWS_Wrapper.sln --logger trx --no-restore /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura --collect "XPlat Code Coverage"
         reportgenerator -reports:"**/coverage.cobertura.xml" -reporttypes:SonarQube -targetdir:"coveragereport"
         dotnet sonarscanner end /d:sonar.login=${SONAR_TOKEN}
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
